@@ -1,0 +1,15 @@
+{#
+/**
+ * @file character.html.twig
+ * Default theme implementation to present Character data.
+ */
+#}
+<div{{ attributes.addClass('show') }}>
+    <h2>{{ title }}</h2>
+    <ul>
+        <li>Slug : {{ slug }}</li>
+        <li>ID : {{  id }}</li>
+    </ul>
+    <p>{{ description_short }}</p>
+    <p>{{ description_long }}</p>
+</div>

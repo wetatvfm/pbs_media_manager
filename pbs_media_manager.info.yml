@@ -1,0 +1,5 @@
+name: PBS Media Manager
+type: module
+description: Connection to the PBS Media Manager API
+core: 8.x
+package: Custom

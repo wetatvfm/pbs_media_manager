@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Contains comic_api.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function pbs_media_manager_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the pbs_media_manager module.
+    case 'help.page.pbs_media_manager':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('PBS Media Manager') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function pbs_media_manager_theme($existing, $type, $theme, $path) {
+  return [
+    'show' => [
+      'variables' => [
+          'id' => '',
+          'slug' => '',
+          'title' => '',
+          'description_short' => '',
+          'description_long' => '',
+          //'image' => '',
+      ],
+    ],
+  ];
+}

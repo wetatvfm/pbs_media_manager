@@ -1,0 +1,6 @@
+show:
+  path: '/show/{id}'
+  defaults:
+    _controller: '\Drupal\pbs_media_manager\Entity\Show::content'
+  requirements:
+    _permission: 'access content'
