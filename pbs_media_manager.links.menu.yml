@@ -1,0 +1,6 @@
+pbs_media_manager.settings:
+  title: 'PBS Media Manager Settings'
+  description: 'PBS Media Manager API settings'
+  parent: system.admin_config_services
+  route_name: pbs_media_manager.settings
+  weight: 100

@@ -15,8 +15,7 @@ class ShowStorage extends ContentEntityNullStorage {
    * @var string
    */
   private $endpoint = "https://media.services.pbs.org/api/v1/shows/";
-  private $client_id = "YOUR KEY HERE";
-  private $client_secret ="YOUR SECRET HERE";
+
   
   /**
    * {@inheritdoc}
@@ -30,9 +29,13 @@ class ShowStorage extends ContentEntityNullStorage {
    *
    */
   public function getShow($id) {
+    //Immutable Config (Read Only)
+    $config = \Drupal::config('pbs_media_manager.settings');
+    $key = $config->get('key');
+    $secret = $config->get('secret');
     $client = new Client();
     $response = $client->get($this->endpoint($id), ['auth' =>
-      [$this->client_id, $this->client_secret]]);
+      [$key, $secret]]);
     $data = json_decode($response->getBody(), TRUE);
     return $this->mapValues($data);
   }

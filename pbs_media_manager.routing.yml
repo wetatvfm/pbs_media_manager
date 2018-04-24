@@ -4,3 +4,10 @@ show:
     _controller: '\Drupal\pbs_media_manager\Entity\Show::content'
   requirements:
     _permission: 'access content'
+pbs_media_manager.settings:
+  path: '/admin/config/pbs_media_manager'
+  defaults:
+    _form: '\Drupal\pbs_media_manager\Form\ConfigForm'
+    _title: 'PBS Media Manager API Settings'
+  requirements:
+    _permission: 'administer pbs media manager'

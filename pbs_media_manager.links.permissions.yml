@@ -1,0 +1,3 @@
+administer pbs media manager:
+  title: 'Administer PBS Media Manager'
+  description: 'Can configure PBS Media Manager API settings'
