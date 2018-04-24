@@ -3,6 +3,7 @@
 namespace Drupal\pbs_media_manager\Entity;
 
 use Drupal\pbs_media_manager\Client\PBS_Media_Manager_API_Client as PBSClient;
+use Drupal\pbs_media_manager\Client\APIConnect;
 use Drupal\Core\Entity\ContentEntityNullStorage;
 
 /**
@@ -29,11 +30,8 @@ class ShowStorage extends ContentEntityNullStorage {
    *
    */
   public function getShow($id) {
-    //Immutable Config (Read Only)
-    $config = \Drupal::config('pbs_media_manager.settings');
-    $key = $config->get('key');
-    $secret = $config->get('secret');
-    $client = new PBSClient($key, $secret, $this->endpoint);
+    $connect = new APIConnect();
+    $client = $connect->connect();
     $response = $client->get_show($id);
     return $this->mapValues($response);
   }
