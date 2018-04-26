@@ -1,0 +1,3 @@
+services:
+  pbs_media_manager.api_connect:
+    class: Drupal\pbs_media_manager\Client\APIConnect
