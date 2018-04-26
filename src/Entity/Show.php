@@ -43,6 +43,7 @@ class Show extends ContentEntityBase {
       '#slug' => $entity['slug'],
       '#description_short' => $entity['description_short'],
       '#description_long' => $entity['description_long'],
+      '#episodes' => $entity['episodes'],
     ];
   }
 

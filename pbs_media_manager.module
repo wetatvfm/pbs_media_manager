@@ -35,6 +35,7 @@ function pbs_media_manager_theme($existing, $type, $theme, $path) {
           'title' => '',
           'description_short' => '',
           'description_long' => '',
+          'episodes' => '',
           //'image' => '',
       ],
     ],
@@ -45,7 +46,7 @@ function pbs_media_manager_theme($existing, $type, $theme, $path) {
         'title' => '',
         'player' => '',
         'description' => '',
-      ]
-    ]
+      ],
+    ],
   ];
 }
