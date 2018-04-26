@@ -10,17 +10,20 @@ class AssetStorage extends ContentEntityNullStorage{
    * {@inheritdoc}
    */
   public function load($id, $default = NULL) {
-    $show = $this->getAsset($id);
-    return isset($show) ? $show : $default;
+    $asset = $this->getAsset($id);
+    return isset($asset) ? $asset : $default;
   }
   
   /**
    *
    */
   public function getAsset($id) {
+    $params = [
+      'platform-slug' => 'partnerplayer',
+    ];
     $connect = new APIConnect();
     $client = $connect->connect();
-    $response = $client->get_asset($id);
+    $response = $client->get_asset($id, FALSE, $params);
     return $this->mapValues($response);
   }
   
