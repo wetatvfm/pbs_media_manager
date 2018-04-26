@@ -38,5 +38,14 @@ function pbs_media_manager_theme($existing, $type, $theme, $path) {
           //'image' => '',
       ],
     ],
+    'asset' => [
+      'variables' => [
+        'id' => '',
+        'slug' => '',
+        'title' => '',
+        'player' => '',
+        'description' => '',
+      ]
+    ]
   ];
 }

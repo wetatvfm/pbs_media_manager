@@ -1,0 +1,4 @@
+player:
+  css:
+    theme:
+      css/player.css: {}

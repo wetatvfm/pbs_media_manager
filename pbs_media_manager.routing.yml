@@ -4,6 +4,12 @@ show:
     _controller: '\Drupal\pbs_media_manager\Entity\Show::content'
   requirements:
     _permission: 'access content'
+asset:
+  path: '/video/{id}'
+  defaults:
+    _controller: '\Drupal\pbs_media_manager\Entity\Asset::content'
+  requirements:
+    _permission: 'access content'
 pbs_media_manager.settings:
   path: '/admin/config/pbs_media_manager'
   defaults:

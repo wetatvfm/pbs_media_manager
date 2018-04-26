@@ -1,0 +1,13 @@
+{#
+/**
+ * @file asset.html.twig
+ * Default theme implementation to present Asset data.
+ */
+#}
+{{ attach_library('pbs_media_manager/player') }}
+<div{{ attributes.addClass('asset') }}>
+    <div{{ attributes.addClass('partner-player') }}>
+        <div>{{ player|raw }}</div>
+        <p>{{ description }}</p>
+    </div>
+</div>

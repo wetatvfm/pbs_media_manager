@@ -1,0 +1,30 @@
+.partner-player {
+  max-width: 100%;
+  padding-bottom: 30px;
+}
+
+.player-error {
+  max-width: 100%;
+}
+
+.partner-player div {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+
+.partner-player div iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.partner-player.player-error div {
+  background-color: #f6f6f2;
+  text-align: center;
+  font-style: italic;
+  padding-top: 30%;
+  padding-bottom: 30%;
+}
