@@ -2,7 +2,6 @@
 
 namespace Drupal\pbs_media_manager\Entity;
 
-use Drupal\pbs_media_manager\Client\PBS_Media_Manager_API_Client as PBSClient;
 use Drupal\pbs_media_manager\Client\APIConnect;
 use Drupal\Core\Entity\ContentEntityNullStorage;
 
@@ -10,14 +9,7 @@ use Drupal\Core\Entity\ContentEntityNullStorage;
  *
  */
 class ShowStorage extends ContentEntityNullStorage {
-  
-  /**
-   * The default info for building our API request
-   * @var string
-   */
-  //private $endpoint = "https://media.services.pbs.org/api/v1/shows/";
-  private $endpoint = "https://media.services.pbs.org/api/v1/";
-  
+
   /**
    * {@inheritdoc}
    */
@@ -34,15 +26,6 @@ class ShowStorage extends ContentEntityNullStorage {
     $client = $connect->connect();
     $response = $client->get_show($id);
     return $this->mapValues($response);
-  }
-  
-  /**
-   * No longer using this, but leaving it in case we change our minds.
-   */
-  public function endpoint($id) {
-    //$params = "&format=json&field_list=id,name,real_name,deck,description,
-    //origin,image,api_detail_url";
-    return $this->endpoint . $id;
   }
   
   /**
