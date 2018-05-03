@@ -36,14 +36,9 @@ class Asset extends ContentEntityBase {
   }
   
   public function content($id) {
-    $entity = $this->load($id);
-    return [
-      '#theme' => 'asset',
-      '#id' => $entity['id'],
-      '#title' => $entity['title'],
-      '#slug' => $entity['slug'],
-      '#player' => $entity['player'],
-      '#description' => $entity['description'],
-    ];
+    $entity['#theme'] = 'asset';
+    $entity['#asset'] = $this->load($id);
+    
+    return $entity;
   }
 }

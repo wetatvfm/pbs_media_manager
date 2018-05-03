@@ -7,7 +7,7 @@
 {{ attach_library('pbs_media_manager/player') }}
 <div{{ attributes.addClass('asset') }}>
     <div{{ attributes.addClass('partner-player') }}>
-        <div>{{ player|raw }}</div>
-        <p>{{ description }}</p>
+        <div>This is a content.player.{{ content.player_code|raw }}</div>
+        <p>{{ content.description_long }}</p>
     </div>
 </div>

@@ -32,12 +32,12 @@ class AssetStorage extends ContentEntityNullStorage{
    */
   public function mapValues($data) {
     $results = $data['data'];
-    return [
-      'id' => $results['id'],
-      'slug' => $results['attributes']['slug'],
-      'title' => $results['attributes']['title'],
-      'player' => $results['attributes']['player_code'],
-      'description' => $results['attributes']['description_long'],
-    ];
+    $values = [];
+    $values['asset_id'] = $results['id'];
+    
+    foreach ($results['attributes'] as $key => $value) {
+      $values[$key] = $value;
+    }
+    return $values;
   }
 }

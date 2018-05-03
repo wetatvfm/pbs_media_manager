@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Render\Element;
 
 /**
  * Implements hook_help().
@@ -25,6 +26,8 @@ function pbs_media_manager_help($route_name, RouteMatchInterface $route_match) {
 
 /**
  * Implements hook_theme().
+ * TODO: Switch these to render elements to use full result.
+ * https://drupal.stackexchange.com/questions/221422/rendering-a-custom-entity
  */
 function pbs_media_manager_theme($existing, $type, $theme, $path) {
   return [
@@ -40,13 +43,21 @@ function pbs_media_manager_theme($existing, $type, $theme, $path) {
       ],
     ],
     'asset' => [
-      'variables' => [
-        'id' => '',
-        'slug' => '',
-        'title' => '',
-        'player' => '',
-        'description' => '',
-      ],
+      'render element' => 'elements',
     ],
   ];
+}
+
+/**
+ * Prepares variables for asset templates.
+ */
+function template_preprocess_asset(&$variables) {
+  
+  // Helpful $content variable for templates.
+  $variables['content'] = [];
+  foreach ($variables['elements']['#asset'] as $key => $value) {
+    $variables['content'][$key] = $variables['elements']['#asset'][$key];
+  }
+  
+  
 }
