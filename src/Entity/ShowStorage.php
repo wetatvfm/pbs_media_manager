@@ -222,8 +222,15 @@ $require_players = TRUE, $include_clips = FALSE, $include_previews = FALSE) {
       foreach ($episodes as &$episode) {
         $episode['attributes']['is_passport'] = $this->checkPassport($episode);
       }
+  
+      return $this->mapEpisodeValues($episodes);
     }
   
+    // Add a flag for whether an asset is behind the Passport paywall.
+    foreach ($episodes as &$episode) {
+      $episode['attributes']['is_passport'] = $this->checkPassport($episode);
+    }
+    
     // Finally, whatever we have is good enough.
     return $this->mapEpisodeValues($episodes);
     
