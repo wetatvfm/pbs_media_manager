@@ -4,7 +4,7 @@
  * Default theme implementation to present Asset data.
  *
  * Available variables:
- * - content: All asset items as returned by the API. Use {{ content }} to
+ * - content: All asset attributes as returned by the API. Use {{ content }} to
  *   print them all, or print a subset such as {{ content.player_code }}. Use
  *   {{ content|without('player_code') }} to temporarily suppress the printing
  *   of a given child element.
@@ -13,7 +13,7 @@
  *   format it first.  See @template_preprocess_asset().
  *
  *   Frequently used elements:
- *   - content.player_code (use content.player_code|raw to keep iframe tags
+ *   - content.player_code (use content.player_code|raw to keep iframe tags)
  *   - content.asset_id
  *   - content.slug
  *   - content.title
