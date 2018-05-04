@@ -36,7 +36,7 @@ class Asset extends ContentEntityBase {
   }
   
   public function content($id) {
-    $entity['#theme'] = 'asset';
+    $entity['#theme'] = 'pbs_mm_asset';
     $entity['#asset'] = $this->load($id);
     
     return $entity;

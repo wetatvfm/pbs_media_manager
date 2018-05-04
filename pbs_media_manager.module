@@ -29,10 +29,10 @@ function pbs_media_manager_help($route_name, RouteMatchInterface $route_match) {
  */
 function pbs_media_manager_theme($existing, $type, $theme, $path) {
   return [
-    'show' => [
+    'pbs_mm_show' => [
       'render element' => 'elements',
     ],
-    'asset' => [
+    'pbs_mm_asset' => [
       'render element' => 'elements',
     ],
   ];
@@ -41,7 +41,7 @@ function pbs_media_manager_theme($existing, $type, $theme, $path) {
 /**
  * Prepares variables for show templates.
  */
-function template_preprocess_show(&$variables) {
+function template_preprocess_pbs_mm_show(&$variables) {
   // Helpful $content variable for templates.
   $variables['content'] = [];
   foreach ($variables['elements']['#show'] as $key => $value) {
@@ -52,7 +52,7 @@ function template_preprocess_show(&$variables) {
 /**
  * Prepares variables for asset templates.
  */
-function template_preprocess_asset(&$variables) {
+function template_preprocess_pbs_mm_asset(&$variables) {
   // Helpful $content variable for templates.
   $variables['content'] = [];
   foreach ($variables['elements']['#asset'] as $key => $value) {

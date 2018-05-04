@@ -35,7 +35,7 @@ class Show extends ContentEntityBase {
   }
 
   public function content($id) {
-    $entity['#theme'] = 'show';
+    $entity['#theme'] = 'pbs_mm_show';
     $entity['#show'] = $this->load($id);
   
     return $entity;
