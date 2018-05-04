@@ -39,13 +39,13 @@ class ShowStorage extends ContentEntityNullStorage {
    */
   public function mapValues($data) {
     $results = $data['data'];
-    return [
-      'id' => $results['id'],
-      'slug' => $results['attributes']['slug'],
-      'title' => $results['attributes']['title'],
-      'description_short' => $results['attributes']['description_short'],
-      'description_long' => $results['attributes']['description_long'],
-    ];
+    $values = [];
+    $values['show_id'] = $results['id'];
+  
+    foreach ($results['attributes'] as $key => $value) {
+      $values[$key] = $value;
+    }
+    return $values;
   }
   
   /**

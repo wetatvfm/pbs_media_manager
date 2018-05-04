@@ -2,18 +2,36 @@
 /**
  * @file show.html.twig
  * Default theme implementation to present Show data.
+ *
+ * Available variables:
+ * - content: All show attributes as returned by the API. Use {{ content }} to
+ *   print them all, or print a subset such as {{ content.player_code }}. Use
+ *   {{ content|without('player_code') }} to temporarily suppress the printing
+ *   of a given child element.
+ *
+ *   If the child element is anything other than a string, you may need to
+ *   format it first.  See @template_preprocess_asset().
+ *
+ *   Frequently used elements:
+ *   - content.show_id
+ *   - content.slug
+ *   - content.title
+ *   - content.description_long
+ *   - content.description_short
+ *   - content.episodes (an array of recent episodes data)
+ *
  */
 #}
 <div{{ attributes.addClass('show') }}>
-    <h2>{{ title }}</h2>
+    <h2>{{ content.title }}</h2>
     <ul>
-        <li>Slug : {{ slug }}</li>
-        <li>ID : {{  id }}</li>
+        <li>Slug : {{ content.slug }}</li>
+        <li>ID : {{  content.show_id }}</li>
     </ul>
-    <p>{{ description_short }}</p>
-    <p>{{ description_long }}</p>
+    <p>{{ content.description_short }}</p>
+    <p>{{ content.description_long }}</p>
     <h3>Recent Episodes</h3>
-    {%  for episode in episodes %}
+    {%  for episode in content.episodes %}
       <h4>{{  episode.title }}</h4>
         <p>{{ episode.description }}</p>
 

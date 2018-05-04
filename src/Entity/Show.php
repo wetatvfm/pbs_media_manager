@@ -35,16 +35,10 @@ class Show extends ContentEntityBase {
   }
 
   public function content($id) {
-    $entity = $this->load($id);
-    return [
-      '#theme' => 'show',
-      '#id' => $entity['id'],
-      '#title' => $entity['title'],
-      '#slug' => $entity['slug'],
-      '#description_short' => $entity['description_short'],
-      '#description_long' => $entity['description_long'],
-      '#episodes' => $entity['episodes'],
-    ];
+    $entity['#theme'] = 'show';
+    $entity['#show'] = $this->load($id);
+  
+    return $entity;
   }
 
 }

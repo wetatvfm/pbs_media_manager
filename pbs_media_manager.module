@@ -26,21 +26,11 @@ function pbs_media_manager_help($route_name, RouteMatchInterface $route_match) {
 
 /**
  * Implements hook_theme().
- * TODO: Switch these to render elements to use full result.
- * https://drupal.stackexchange.com/questions/221422/rendering-a-custom-entity
  */
 function pbs_media_manager_theme($existing, $type, $theme, $path) {
   return [
     'show' => [
-      'variables' => [
-          'id' => '',
-          'slug' => '',
-          'title' => '',
-          'description_short' => '',
-          'description_long' => '',
-          'episodes' => '',
-          //'image' => '',
-      ],
+      'render element' => 'elements',
     ],
     'asset' => [
       'render element' => 'elements',
@@ -49,15 +39,23 @@ function pbs_media_manager_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Prepares variables for show templates.
+ */
+function template_preprocess_show(&$variables) {
+  // Helpful $content variable for templates.
+  $variables['content'] = [];
+  foreach ($variables['elements']['#show'] as $key => $value) {
+    $variables['content'][$key] = $variables['elements']['#show'][$key];
+  }
+}
+
+/**
  * Prepares variables for asset templates.
  */
 function template_preprocess_asset(&$variables) {
-  
   // Helpful $content variable for templates.
   $variables['content'] = [];
   foreach ($variables['elements']['#asset'] as $key => $value) {
     $variables['content'][$key] = $variables['elements']['#asset'][$key];
   }
-  
-  
 }
