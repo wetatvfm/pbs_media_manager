@@ -18,7 +18,6 @@
  *   - content.title
  *   - content.description_long
  *   - content.description_short
- *   - content.episodes (an array of recent episodes data)
  *
  */
 #}
@@ -30,10 +29,5 @@
     </ul>
     <p>{{ content.description_short }}</p>
     <p>{{ content.description_long }}</p>
-    <h3>Recent Episodes</h3>
-    {%  for episode in content.episodes %}
-      <h4>{{  episode.title }}</h4>
-        <p>{{ episode.description }}</p>
 
-    {% endfor %}
 </div>

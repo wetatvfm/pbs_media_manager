@@ -35,6 +35,9 @@ function pbs_media_manager_theme($existing, $type, $theme, $path) {
     'pbs_mm_asset' => [
       'render element' => 'elements',
     ],
+    'pbs_mm_asset_teasers' => [
+      'render element' => 'elements',
+    ],
   ];
 }
 
@@ -57,5 +60,20 @@ function template_preprocess_pbs_mm_asset(&$variables) {
   $variables['content'] = [];
   foreach ($variables['elements']['#asset'] as $key => $value) {
     $variables['content'][$key] = $variables['elements']['#asset'][$key];
+  }
+}
+
+
+/**
+ * Prepares variables for asset teaser templates.
+ */
+function template_preprocess_pbs_mm_asset_teasers(&$variables) {
+  // Helpful $content variable for templates.
+  $variables['content'] = [];
+  foreach ($variables['elements']['#asset_teasers'] as $i => $asset) {
+    foreach ($asset as $key => $value) {
+      $variables['content'][$i][$key] = $value;
+    }
+    
   }
 }
