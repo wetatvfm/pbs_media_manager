@@ -36,9 +36,16 @@ class Asset extends ContentEntityBase {
   }
   
   public function content($pbs_mm_asset_id) {
-    $entity['#theme'] = 'pbs_mm_asset';
-    $entity['#asset'] = $this->load($pbs_mm_asset_id);
-    
-    return $entity;
+    $asset = $this->load($pbs_mm_asset_id);
+    if ($asset) {
+      $entity['#theme'] = 'pbs_mm_asset';
+      $entity['#asset'] = $asset;
+  
+      return $entity;
+    }
+    else {
+      throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+    }
+
   }
 }

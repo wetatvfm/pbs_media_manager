@@ -24,7 +24,10 @@ class AssetStorage extends ContentEntityNullStorage{
     $connect = new APIConnect();
     $client = $connect->connect();
     $response = $client->get_asset($id, FALSE, $params);
-    return $this->mapValues($response);
+    if (isset($response['data'])) {
+      return $this->mapValues($response);
+    }
+    return NULL;
   }
   
   /**
