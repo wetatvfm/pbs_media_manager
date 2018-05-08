@@ -35,10 +35,17 @@ class Show extends ContentEntityBase {
   }
 
   public function content($pbs_mm_show_id) {
-    $entity['#theme'] = 'pbs_mm_show';
-    $entity['#show'] = $this->load($pbs_mm_show_id);
+    $show = $this->load($pbs_mm_show_id);
+    if ($show) {
+      $entity['#theme'] = 'pbs_mm_show';
+      $entity['#show'] = $show;
   
-    return $entity;
+      return $entity;
+    }
+    else {
+      throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+    }
+   
   }
 
 }

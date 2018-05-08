@@ -15,14 +15,6 @@ class ShowStorage extends ContentEntityNullStorage {
    */
   public function load($id, $default = NULL) {
     $show = $this->getShow($id);
-    // If there's a show, get the latest episodes, too.
-    // TODO: Probably should be a separate component/function for flexibility.
-    /*
-    if (isset($show)) {
-      $episodes = $this->getLatestEpisodes($id, 5);
-      $show['episodes'] = $episodes;
-    }
-    */
     return isset($show) ? $show : $default;
   }
   
@@ -33,7 +25,10 @@ class ShowStorage extends ContentEntityNullStorage {
     $connect = new APIConnect();
     $client = $connect->connect();
     $response = $client->get_show($id);
-    return $this->mapValues($response);
+    if (isset($response['data'])) {
+      return $this->mapValues($response);
+    }
+    return NULL;
   }
   
   /**
