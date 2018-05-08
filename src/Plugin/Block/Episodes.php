@@ -30,6 +30,7 @@ class Episodes extends BlockBase {
   public function defaultConfiguration() {
     return [
       'pbs_mm_episodes_count' => 5,
+      'pbs_mm_sort' => '-premiered_on',
       'pbs_mm_include_specials' => TRUE,
       'pbs_mm_require_players' => TRUE,
       'pbs_mm_include_clips' => FALSE,
@@ -60,6 +61,17 @@ class Episodes extends BlockBase {
       '#default_value' => isset($config['pbs_mm_episodes_count']) ? $config['pbs_mm_episodes_count'] : '',
     ];
   
+    $form['pbs_mm_sort'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Sort by:'),
+      '#description' => $this->t('Show the latest n episodes in descending order, or the first n episodes in ascending order.'),
+      '#options' => [
+        '-premiered_on' => $this->t('Premiere date, descending'),
+        'premiered_on' => $this->t('Premiere date, ascending'),
+      ],
+      '#default_value' => isset($config['pbs_mm_sort']) ? $config['pbs_mm_sort'] : '',
+    ];
+    
     $form['pbs_mm_include_specials'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include specials'),
@@ -106,6 +118,7 @@ class Episodes extends BlockBase {
     parent::blockSubmit($form, $form_state);
     $values = $form_state->getValues();
     $this->configuration['pbs_mm_episodes_count'] = $values['pbs_mm_episodes_count'];
+    $this->configuration['pbs_mm_sort'] = $values['pbs_mm_sort'];
     $this->configuration['pbs_mm_include_specials'] = $values['pbs_mm_include_specials'];
     $this->configuration['pbs_mm_require_players'] = $values['pbs_mm_require_players'];
     $this->configuration['pbs_mm_include_clips'] = $values['pbs_mm_include_clips'];
@@ -128,12 +141,13 @@ class Episodes extends BlockBase {
       
       // Get additional parameters from the block config.
       $count = $this->configuration['pbs_mm_episodes_count'];
+      $sort = $this->configuration['pbs_mm_sort'];
       $include_specials = $this->configuration['pbs_mm_include_specials'];
       $require_players = $this->configuration['pbs_mm_require_players'];
       $include_clips = $this->configuration['pbs_mm_include_clips'];
       $include_previews = $this->configuration['pbs_mm_include_previews'];
-      
-      $episodes = $this->getLatestEpisodes($slug, $count, $include_specials,
+      $episodes = $this->getEpisodes($slug, $count, $sort,
+      $include_specials,
         $require_players, $include_clips, $include_previews);
   
       $build = [];
@@ -158,6 +172,8 @@ class Episodes extends BlockBase {
    *   The id or slug of the show.
    * @param int $count
    *   The number of episodes to retrieve.
+   * @param string $sort
+   *   How to sort the results.
    * @param bool $include_specials
    *   Include specials in the list of returned episodes.
    * @param bool $require_players
@@ -170,7 +186,9 @@ class Episodes extends BlockBase {
    * @return array
    *   Returns an array of assets, giving preference to full length episodes.
    */
-  public function getLatestEpisodes($id, $count, $include_specials = TRUE,
+  public function getEpisodes($id, $count, $sort = '-premiered_on',
+    $include_specials =
+  TRUE,
     $require_players = TRUE, $include_clips = FALSE, $include_previews = FALSE) {
     // For performance reasons, limit the number of items queried. But still
     // request enough items to allow for some to be filtered out.  The max
@@ -184,11 +202,11 @@ class Episodes extends BlockBase {
       'show-slug' => $id,
       'type' => 'full_length',
       'platform-slug' => 'partnerplayer',
-      'sort' => '-premiered_on',
+      'sort' => $sort,
       'page-size' => $max,
       'page' => 1,
     );
-    
+
     $connect = new APIConnect();
     $client = $connect->connect();
     $episodes = $client->get_assets($queryargs);
@@ -198,28 +216,14 @@ class Episodes extends BlockBase {
     // We can't trust the premiered_on sort for episodes that premiered on
     // the same day.
     if (!array_key_exists('data', $episodes)) {
-      usort($episodes, function ($a, $b) {
-        if (isset($b['attributes']) && isset($a['attributes'])) {
-          // If the episodes premiered on the same day...
-          if ($b['attributes']['premiered_on'] ==
-            $a['attributes']['premiered_on']) {
-            // And if there's an episode ordinal for both episodes...
-            if (isset($a['attributes']['episode']['attributes']['ordinal']) &&
-              isset($b['attributes']['episode']['attributes']['ordinal'])) {
-              // Sort by the ordinal.
-              return $b['attributes']['episode']['attributes']['ordinal'] -
-                $a['attributes']['episode']['attributes']['ordinal'];
-            }
-          }
-          // Otherwise, just sort by premiered_on.
-          return strcmp($b['attributes']['premiered_on'],
-            $a['attributes']['premiered_on']);
-        }
-        else {
-          return FALSE;
-        }
-      });
       
+      $direction = 'sortDesc';
+      if ($sort == 'premiered_on') {
+        $direction = 'sortAsc';
+      }
+
+      usort($episodes, array($this, $direction));
+
       // Filter out unwanted items, such as specials or items without players.
       if ($require_players || !($include_specials)) {
         
@@ -337,6 +341,74 @@ class Episodes extends BlockBase {
     // Finally, whatever we have is good enough.
     return $this->mapEpisodeValues($episodes);
     
+  }
+  
+  /**
+   * Comparative callback function to sort descending.
+   *
+   * @param mixed $a
+   *   The first item.
+   * @param mixed $b
+   *   The second item.
+   *
+   * @return integer
+   */
+  static function sortDesc($a, $b) {
+    if (isset($b['attributes']) && isset($a['attributes'])) {
+      // If the episodes premiered on the same day...
+      if ($b['attributes']['premiered_on'] ==
+        $a['attributes']['premiered_on']) {
+        // And if there's an episode ordinal for both episodes...
+        if (isset($a['attributes']['episode']['attributes']['ordinal']) &&
+          isset($b['attributes']['episode']['attributes']['ordinal'])) {
+          // Sort by the ordinal.
+          return $b['attributes']['episode']['attributes']['ordinal'] -
+            $a['attributes']['episode']['attributes']['ordinal'];
+        
+        }
+      }
+      // Otherwise, just sort by premiered_on.
+      return strcmp($b['attributes']['premiered_on'],
+        $a['attributes']['premiered_on']);
+    
+    }
+    else {
+      return FALSE;
+    }
+  }
+  
+  /**
+   * Comparative callback function to sort descending.
+   *
+   * @param mixed $a
+   *   The first item.
+   * @param mixed $b
+   *   The second item.
+   *
+   * @return integer
+   */
+  static function sortAsc($a, $b) {
+    if (isset($b['attributes']) && isset($a['attributes'])) {
+      // If the episodes premiered on the same day...
+      if ($b['attributes']['premiered_on'] ==
+        $a['attributes']['premiered_on']) {
+        // And if there's an episode ordinal for both episodes...
+        if (isset($a['attributes']['episode']['attributes']['ordinal']) &&
+          isset($b['attributes']['episode']['attributes']['ordinal'])) {
+          // Sort by the ordinal.
+          return $a['attributes']['episode']['attributes']['ordinal'] -
+            $b['attributes']['episode']['attributes']['ordinal'];
+          
+        }
+      }
+      // Otherwise, just sort by premiered_on.
+      return strcmp($a['attributes']['premiered_on'],
+        $b['attributes']['premiered_on']);
+      
+    }
+    else {
+      return FALSE;
+    }
   }
   
   /**
