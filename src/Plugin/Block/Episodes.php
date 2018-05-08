@@ -3,33 +3,151 @@
 namespace Drupal\pbs_media_manager\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\pbs_media_manager\Client\APIConnect;
 
 /**
- * Provides a 'LatestEpisodes' block.
+ * Provides a 'Episodes' block.
  *
  * @Block(
- *  id = "latest_episodes",
- *  admin_label = @Translation("Latest episodes"),
+ *  id = "episodes",
+ *  admin_label = @Translation("Episodes"),
  * )
  */
-class LatestEpisodes extends BlockBase {
+class Episodes extends BlockBase {
+  
+  /**
+   * {@inheritdoc}
+   *
+   * This method sets the block default configuration. This configuration
+   * determines the block's behavior when a block is initially placed in a
+   * region. Default values for the block configuration form should be added to
+   * the configuration array. System default configurations are assembled in
+   * BlockBase::__construct() e.g. cache setting and block title visibility.
+   *
+   * @see \Drupal\block\BlockBase::__construct()
+   */
+  public function defaultConfiguration() {
+    return [
+      'pbs_mm_episodes_count' => 5,
+      'pbs_mm_include_specials' => TRUE,
+      'pbs_mm_require_players' => TRUE,
+      'pbs_mm_include_clips' => FALSE,
+      'pbs_mm_include_previews' => FALSE,
+    ];
+  }
+  
+  /**
+   * {@inheritdoc}
+   *
+   * This method defines form elements for custom block configuration. Standard
+   * block configuration fields are added by BlockBase::buildConfigurationForm()
+   * (block title and title visibility) and BlockFormController::form() (block
+   * visibility settings).
+   *
+   * @see \Drupal\block\BlockBase::buildConfigurationForm()
+   * @see \Drupal\block\BlockFormController::form()
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $form = parent::blockForm($form, $form_state);
+    
+    $config = $this->getConfiguration();
+    
+    $form['pbs_mm_episodes_count'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Number of episodes to display'),
+      '#description' => $this->t('The maximum number of episodes that will display in the block. If not enough episodes are returned, the block will display what is available.'),
+      '#default_value' => isset($config['pbs_mm_episodes_count']) ? $config['pbs_mm_episodes_count'] : '',
+    ];
+  
+    $form['pbs_mm_include_specials'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include specials'),
+      '#description' => $this->t('Include specials in the list of returned episodes.'),
+      '#default_value' => isset($config['pbs_mm_include_specials']) ?
+        $config['pbs_mm_include_specials'] : '',
+    ];
+  
+    $form['pbs_mm_require_players'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Require players'),
+      '#description' => $this->t('Only include results that are available to be viewed.'),
+      '#default_value' => isset($config['pbs_mm_require_players']) ?
+        $config['pbs_mm_require_players'] : '',
+    ];
+  
+    $form['pbs_mm_include_clips'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include clips'),
+      '#description' => $this->t('Include clips if there are not enough episodes retrieved.'),
+      '#default_value' => isset($config['pbs_mm_include_clips']) ?
+        $config['pbs_mm_include_clips'] : '',
+    ];
 
+    $form['pbs_mm_include_previews'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include previews'),
+      '#description' => $this->t('Include previews if there are not enough episodes retrieved.'),
+      '#default_value' => isset($config['pbs_mm_include_clips']) ?
+        $config['pbs_mm_include_clips'] : '',
+    ];
+    return $form;
+  }
+  
+  /**
+   * {@inheritdoc}
+   *
+   * This method processes the blockForm() form fields when the block
+   * configuration form is submitted.
+   *
+   * The blockValidate() method can be used to validate the form submission.
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    parent::blockSubmit($form, $form_state);
+    $values = $form_state->getValues();
+    $this->configuration['pbs_mm_episodes_count'] = $values['pbs_mm_episodes_count'];
+    $this->configuration['pbs_mm_include_specials'] = $values['pbs_mm_include_specials'];
+    $this->configuration['pbs_mm_require_players'] = $values['pbs_mm_require_players'];
+    $this->configuration['pbs_mm_include_clips'] = $values['pbs_mm_include_clips'];
+    $this->configuration['pbs_mm_include_previews'] = $values['pbs_mm_include_previews'];
+    
+  }
+  
+  
+  
   /**
    * {@inheritdoc}
    */
   public function build() {
-    //TODO: Figure out how to get this from the URL or otherwise.
-    $slug = 'in-principle';
     
-    //TODO: Figure out how to get the count from config.
-    $episodes = $this->getLatestEpisodes($slug, 5);
+    //TODO: Get this from config also.
+    //Get the slug from the URL
+    $slug = \Drupal::routeMatch()->getParameter('pbs_mm_show_id');
+
+    if ($slug) {
+      
+      // Get additional parameters from the block config.
+      $count = $this->configuration['pbs_mm_episodes_count'];
+      $include_specials = $this->configuration['pbs_mm_include_specials'];
+      $require_players = $this->configuration['pbs_mm_require_players'];
+      $include_clips = $this->configuration['pbs_mm_include_clips'];
+      $include_previews = $this->configuration['pbs_mm_include_previews'];
+      
+      $episodes = $this->getLatestEpisodes($slug, $count, $include_specials,
+        $require_players, $include_clips, $include_previews);
+  
+      $build = [];
+      $build['episodes']['#theme'] = 'pbs_mm_asset_teasers';
+      $build['episodes']['#asset_teasers'] = $episodes;
+      $build['episodes']['#cache'] = [
+        'contexts' => ['url.path'],
+      ];
+  
+      return $build;
+      
+    }
     
-    $build = [];
-    $build['latest_episodes']['#theme'] = 'pbs_mm_asset_teasers';
-    $build['latest_episodes']['#asset_teasers'] = $episodes;
-    
-    return $build;
+    return NULL;
   }
   
   

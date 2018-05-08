@@ -1,11 +1,11 @@
 show:
-  path: '/show/{id}'
+  path: '/show/{pbs_mm_show_id}'
   defaults:
     _controller: '\Drupal\pbs_media_manager\Entity\Show::content'
   requirements:
     _permission: 'access content'
 asset:
-  path: '/video/{id}'
+  path: '/video/{pbs_mm_asset_id}'
   defaults:
     _controller: '\Drupal\pbs_media_manager\Entity\Asset::content'
   requirements:
