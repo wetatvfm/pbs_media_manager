@@ -15,11 +15,17 @@ use Drupal\Core\Entity\EntityChangedTrait;
  *   label = @Translation("Asset"),
  *   handlers = {
  *    "storage" = "Drupal\pbs_media_manager\Entity\AssetStorage",
+ *    "route_provider" = {
+ *       "html" = "Drupal\pbs_media_manager\Entity\AssetRouteProvider",
+ *     },
  *   },
  *   base_table = NULL,
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "title"
+ *   },
+ *   links = {
+ *     "canonical" = "/video/{pbs_mm_asset_id}",
  *   }
  * )
  */
