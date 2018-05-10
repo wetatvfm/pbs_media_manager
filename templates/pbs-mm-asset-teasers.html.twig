@@ -4,32 +4,39 @@
  * Default theme implementation to present Asset data.
  *
  * Available variables:
- * - content: All asset attributes as returned by the API. Use {{ content }} to
- *   print them all, or print a subset such as {{ content.player_code }}. Use
- *   {{ content|without('player_code') }} to temporarily suppress the printing
- *   of a given child element.
+ * - content.asset: An array of all asset attributes as returned by the API.
  *
  *   If the child element is anything other than a string, you may need to
- *   format it first.  See @template_preprocess_asset().
+ *   format it first.  See @template_preprocess_pbs_mm_asset_teasers().
  *
  *   Frequently used elements:
- *   - content.player_code (use content.player_code|raw to keep iframe tags)
- *   - content.asset_id
- *   - content.slug
- *   - content.title
- *   - content.description_long
- *   - content.description_short
+ *   - asset.player_code (use content.player_code|raw to keep iframe tags)
+ *   - asset.asset_id
+ *   - asset.slug
+ *   - asset.title
+ *   - asset.description_long
+ *   - asset.description_short
+ *   - asset.images.[profile_name] (replace any hyphens with underscores)
  *
- *  This template attaches some rudimentary CSS to ensure that the partner
- *  player iframe displays responsively.
+ *  This template attaches some rudimentary CSS to resize and float asset
+ *  images.
  *
  */
 #}
 
-<div{{ attributes.addClass('asset-teaser') }}>
-    {%  for asset in content %}
-        <h3>{{  asset.title }}</h3>
+{{ attach_library('pbs_media_manager/asset_teaser') }}
+{%  for asset in content %}
+    <div{{ attributes.addClass('asset-teaser') }}>
+        <a href="{{  path('entity.asset.canonical', {'pbs_mm_asset_id': asset.slug}) }}"><img src="{{ asset.images.asset_mezzanine_16x9 }}" alt="{{ asset.title
+            }}"></a>
+        <h3>{{  asset.title }} {%  if asset.is_passport %}<span {{ attributes
+            .addClass('hide-text passport') }}
+            }}>Passport membership required</span>{% endif %}</h3>
         <p>Premiere date: {{  asset.premiered_on }}</p>
         <p>{{ asset.description_long }}</p>
-    {% endfor %}
-</div>
+        <p><a href="{{  path('entity.asset.canonical', {'pbs_mm_asset_id': asset.slug}) }}">Play {{ asset.title }} </a></p>
+
+
+    </div>
+{% endfor %}
+

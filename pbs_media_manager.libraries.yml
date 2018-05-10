@@ -2,3 +2,7 @@ player:
   css:
     theme:
       css/player.css: {}
+asset_teaser:
+  css:
+    theme:
+      css/asset_teaser.css: {}

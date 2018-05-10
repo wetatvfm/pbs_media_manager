@@ -49,6 +49,14 @@ function template_preprocess_pbs_mm_show(&$variables) {
   $variables['content'] = [];
   foreach ($variables['elements']['#show'] as $key => $value) {
     $variables['content'][$key] = $variables['elements']['#show'][$key];
+    if ($key == 'images') {
+      unset($variables['content'][$key]);
+      foreach ($variables['elements']['#show'][$key] as $image) {
+        $profile = str_replace('-', '_', $image['profile']);
+        $variables['content'][$key][$profile] = $image['image'];
+      }
+    }
+    
   }
 }
 
@@ -73,6 +81,13 @@ function template_preprocess_pbs_mm_asset_teasers(&$variables) {
   foreach ($variables['elements']['#asset_teasers'] as $i => $asset) {
     foreach ($asset as $key => $value) {
       $variables['content'][$i][$key] = $value;
+      if ($key == 'images') {
+        unset($variables['content'][$i][$key]);
+        foreach ($asset[$key] as $image) {
+          $profile = str_replace('-', '_', $image['profile']);
+          $variables['content'][$i][$key][$profile] = $image['image'];
+        }
+      }
     }
     
   }

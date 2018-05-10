@@ -1,0 +1,24 @@
+.asset-teaser {
+  clear: both;
+  padding: 20px 0;
+}
+
+.asset-teaser img {
+  display: inline-block;
+  float: left;
+  margin-right: 1.5rem;
+  width: 40%;
+}
+
+.asset-teaser span.passport {
+  width: 15px;
+  height: 15px;
+  background: url(images/passport_sm.png) left no-repeat;
+}
+
+.asset-teaser span.hide-text {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  color: transparent;
+}

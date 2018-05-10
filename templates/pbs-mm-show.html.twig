@@ -18,16 +18,15 @@
  *   - content.title
  *   - content.description_long
  *   - content.description_short
+ *   - content.images.[profile_name] (replace any hyphens with underscores)
  *
  */
 #}
 <div{{ attributes.addClass('show') }}>
     <h2>{{ content.title }}</h2>
-    <ul>
-        <li>Slug : {{ content.slug }}</li>
-        <li>ID : {{  content.show_id }}</li>
-    </ul>
-    <p>{{ content.description_short }}</p>
+    <img src="{{ content.images.show_mezzanine16x9 }}" alt="{{ content.title
+    }}">
+
     <p>{{ content.description_long }}</p>
 
 </div>
