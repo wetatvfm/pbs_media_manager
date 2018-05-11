@@ -15,11 +15,17 @@ use Drupal\Core\Entity\EntityChangedTrait;
  *   label = @Translation("Show"),
  *   handlers = {
  *    "storage" = "Drupal\pbs_media_manager\Entity\ShowStorage",
+ *    "route_provider" = {
+ *       "html" = "Drupal\pbs_media_manager\Entity\ShowRouteProvider",
+ *     },
  *   },
  *   base_table = NULL,
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "title"
+ *   },
+ *   links = {
+ *     "canonical" = "/show/{pbs_mm_show_id}",
  *   }
  * )
  */
