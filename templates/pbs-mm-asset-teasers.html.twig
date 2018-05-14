@@ -27,8 +27,10 @@
 {{ attach_library('pbs_media_manager/asset_teaser') }}
 {%  for asset in content %}
     <div{{ attributes.addClass('asset-teaser') }}>
+        {% if asset.images.asset_mezzanine_16x9 %}
         <a href="{{  path('entity.asset.canonical', {'pbs_mm_asset_id': asset.slug}) }}"><img src="{{ asset.images.asset_mezzanine_16x9 }}" alt="{{ asset.title
             }}"></a>
+        {% endif %}
         <h3>{{  asset.title }} {%  if asset.is_passport %}<span {{ attributes
             .addClass('hide-text passport') }}
             }}>Passport membership required</span>{% endif %}</h3>

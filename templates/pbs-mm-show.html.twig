@@ -24,8 +24,10 @@
 #}
 <div{{ attributes.addClass('show') }}>
     <h2>{{ content.title }}</h2>
+    {%  if content.images.show_mezzanine16x9 %}
     <img src="{{ content.images.show_mezzanine16x9 }}" alt="{{ content.title
     }}">
+    {% endif %}
 
     <p>{{ content.description_long }}</p>
 </div>
