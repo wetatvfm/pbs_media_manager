@@ -53,5 +53,16 @@ class Show extends ContentEntityBase {
     }
    
   }
+  
+  /**
+   * Returns a page title.
+   */
+  public function getTitle($pbs_mm_show_id) {
+    $show = $this->load($pbs_mm_show_id);
+    if ($show) {
+      return $show['title'];
+    }
+   
+  }
 
 }

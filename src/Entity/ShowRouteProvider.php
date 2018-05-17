@@ -20,6 +20,7 @@ class ShowRouteProvider implements EntityRouteProviderInterface {
     $route = (new Route('/show/{pbs_mm_show_id}'))
       ->addDefaults([
         '_controller' => '\Drupal\pbs_media_manager\Entity\Show::content',
+        '_title_callback' => '\Drupal\pbs_media_manager\Entity\Show::getTitle',
       ])
       ->setRequirement('_permission', 'access content');
     $route_collection->add('entity.show.canonical', $route);
